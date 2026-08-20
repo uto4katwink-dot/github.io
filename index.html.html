@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Запрошення на побачення 🌻</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#101d38;
+    --night-2:#1a2c52;
+    --cobalt:#3a5bab;
+    --chrome:#f0b429;
+    --chrome-2:#f6cf5e;
+    --blossom:#f3c7cf;
+    --blossom-2:#f8dee2;
+    --blossom-deep:#d98ea0;
+    --cream:#f5efe4;
+    --cream-2:#ece2d0;
+    --ink:#1c1508;
+    --sienna:#9a4a1c;
+    --midnight:#0a1226;
+    --gold:#f4c430;
+    --red:#c0392b;
+    --red-light:#fde8e5;
+    --safe-t:env(safe-area-inset-top,0px);
+    --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  ::selection{ background:var(--blossom); color:var(--ink); }
+  h1,h2,h3,.display{ font-family:'Playfair Display', serif; letter-spacing:-0.01em; }
+  .eyebrow{ font-family:'JetBrains Mono', monospace; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.6; }
+  button{ font-family:inherit; border:none; background:none; cursor:pointer; -webkit-appearance:none; touch-action:manipulation; }
+  .wrap{ max-width:520px; margin:0 auto; padding:0 1.4rem; }
+  .reveal{ opacity:0; transform:translateY(20px); transition:opacity .8s ease, transform .8s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  .grain{ position:fixed; inset:0; z-index:40; pointer-events:none; opacity:0.05; mix-blend-mode:overlay; }
+
+  .intro-overlay{
+    position:fixed; inset:0; z-index:300; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:radial-gradient(ellipse 130% 90% at 50% 20%, var(--night-2), var(--night) 60%, var(--midnight) 100%);
+    transition:opacity .9s ease, visibility .9s ease; padding:2rem;
+  }
+  .intro-overlay.closed{ opacity:0; visibility:hidden; pointer-events:none; }
+  .intro-overlay .stars span{ position:absolute; width:2px; height:2px; border-radius:50%; background:var(--chrome-2); box-shadow:0 0 6px 1px rgba(246,207,94,0.8); animation:twinkle 4s ease-in-out infinite; }
+  .envelope{ position:relative; width:200px; height:132px; cursor:pointer; z-index:2; }
+  .envelope-body{ position:absolute; inset:0; top:20px; background:linear-gradient(160deg, var(--cream), var(--cream-2)); border-radius:5px; box-shadow:0 24px 55px rgba(0,0,0,0.45); }
+  .envelope-body::before, .envelope-body::after{
+    content:""; position:absolute; bottom:0; width:0; height:0;
+    border-bottom:56px solid rgba(28,21,8,0.06);
+  }
+  .envelope-body::before{ left:0; border-left:100px solid transparent; border-right:0; }
+  .envelope-body::after{ right:0; border-right:100px solid transparent; border-left:0; }
+  .envelope-flap{
+    position:absolute; top:20px; left:0; width:0; height:0;
+    border-left:100px solid transparent; border-right:100px solid transparent;
+    border-top:64px solid var(--blossom);
+    transform-origin:top center; transform:rotateX(0deg); transform-style:preserve-3d;
+    transition:transform 1s cubic-bezier(.6,.05,.3,1);
+    filter:drop-shadow(0 6px 10px rgba(0,0,0,0.25));
+  }
+  .envelope.opening .envelope-flap{ transform:rotateX(-178deg); }
+  .wax-seal{
+    position:absolute; top:38px; left:50%; transform:translateX(-50%); width:44px; height:44px; border-radius:50%;
+    background:radial-gradient(circle at 34% 28%, #c0602c, var(--sienna) 70%, #6e2c0e);
+    display:flex; align-items:center; justify-content:center; z-index:3;
+    font-family:'Playfair Display', serif; color:var(--cream); font-weight:700; font-size:1.15rem;
+    box-shadow:0 4px 12px rgba(0,0,0,0.45); transition:opacity .4s ease .2s;
+  }
+  .envelope.opening .wax-seal{ opacity:0; }
+  .intro-caption{ position:relative; z-index:2; text-align:center; color:var(--cream); margin-top:2.2rem; }
+  .intro-caption .to{ font-family:'Playfair Display', serif; font-style:italic; font-size:1.5rem; color:var(--blossom); margin-bottom:0.5rem; }
+  .intro-caption .hint{ font-family:'JetBrains Mono', monospace; font-size:0.65rem; letter-spacing:0.16em; text-transform:uppercase; opacity:0.55; animation:pulseHint 2.4s ease-in-out infinite; }
+  @keyframes pulseHint{ 0%,100%{opacity:0.35;} 50%{opacity:0.75;} }
+
+  .hero{
+    position:relative; min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; overflow:hidden;
+    background:radial-gradient(ellipse 130% 90% at 50% 15%, var(--night-2), var(--night) 60%, #0a1226 100%);
+    padding:calc(4.5rem + var(--safe-t)) 1.4rem 3.5rem;
+  }
+  .sunflowers-bg{ position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+  .sunflower-bg{ position:absolute; bottom:-10%; opacity:0.12; animation:sway 6s ease-in-out infinite alternate; }
+  .sunflower-bg:nth-child(1){ left:-5%; width:120px; animation-delay:0s; }
+  .sunflower-bg:nth-child(2){ right:-8%; width:160px; animation-delay:1.5s; bottom:-5%; }
+  .sunflower-bg:nth-child(3){ left:20%; width:80px; animation-delay:3s; bottom:-15%; }
+  .sunflower-bg:nth-child(4){ right:15%; width:100px; animation-delay:2s; bottom:-8%; }
+  @keyframes sway{ 0%{ transform:rotate(-8deg) scale(1); } 100%{ transform:rotate(8deg) scale(1.05); } }
+
+  .swirl-layer{
+    position:absolute; inset:-15%; z-index:0;
+    background:
+      radial-gradient(circle at 22% 28%, rgba(240,180,41,0.5) 0%, rgba(240,180,41,0) 9%),
+      radial-gradient(circle at 76% 20%, rgba(243,199,207,0.45) 0%, rgba(243,199,207,0) 8%),
+      radial-gradient(circle at 58% 58%, rgba(58,91,171,0.5) 0%, rgba(58,91,171,0) 20%),
+      radial-gradient(circle at 14% 70%, rgba(243,199,207,0.35) 0%, rgba(243,199,207,0) 20%),
+      conic-gradient(from 0deg at 50% 45%, rgba(58,91,171,0.22), rgba(16,29,56,0) 30%, rgba(240,180,41,0.16) 55%, rgba(16,29,56,0) 80%, rgba(58,91,171,0.22) 100%);
+    animation:swirl 100s linear infinite;
+    mix-blend-mode:screen;
+    filter:blur(0.5px);
+  }
+  @keyframes swirl{ 0%{ transform:rotate(0deg) scale(1.15);} 50%{ transform:rotate(180deg) scale(1.3);} 100%{ transform:rotate(360deg) scale(1.15);} }
+  .stars span{ position:absolute; width:2.5px; height:2.5px; border-radius:50%; background:var(--chrome-2); box-shadow:0 0 8px 2px rgba(246,207,94,0.85); animation:twinkle 4s ease-in-out infinite; z-index:1; }
+  @keyframes twinkle{ 0%,100%{opacity:.2;} 50%{opacity:1;} }
+
+  .petals{ position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:1; }
+  .petal{ position:absolute; top:-5%; border-radius:60% 0 60% 0; background:var(--blossom); opacity:0.85; animation:fall linear infinite; }
+  @keyframes fall{
+    0%{ transform:translateY(-8vh) translateX(0) rotate(0deg); }
+    100%{ transform:translateY(112vh) translateX(var(--drift,40px)) rotate(340deg); }
+  }
+
+  .cypress{ position:absolute; left:5%; bottom:0; width:76px; opacity:0.5; z-index:1; }
+  .moon{ position:absolute; top:9%; right:9%; width:44px; z-index:1; filter:drop-shadow(0 0 16px rgba(246,207,94,0.55)); }
+  
+  .heart-trace{
+    position:absolute;
+    top:12%;
+    left:50%;
+    transform:translateX(-50%);
+    width:100px;
+    height:80px;
+    opacity:0;
+    transition:opacity .5s ease;
+    z-index:3;
+    pointer-events:none;
+  }
+  .heart-trace.show{ opacity:1; }
+  .heart-trace path{
+    fill:none;
+    stroke:var(--blossom);
+    stroke-width:2;
+    stroke-dasharray:450;
+    stroke-dashoffset:450;
+    transition:stroke-dashoffset 1.3s ease;
+    filter:drop-shadow(0 0 8px rgba(243,199,207,0.7));
+  }
+  
+  .tap-hint{ font-family:'JetBrains Mono', monospace; font-size:0.58rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--cream-2); opacity:0.4; margin-top:0.8rem; }
+  .hero-content{ position:relative; z-index:2; color:var(--cream); }
+  .hero-eyebrow{ font-family:'JetBrains Mono', monospace; font-size:0.68rem; letter-spacing:0.24em; text-transform:uppercase; color:var(--blossom); margin-bottom:1.2rem; display:inline-block; }
+  .hero h1{ font-size:clamp(2.8rem, 13vw, 4.4rem); line-height:1.02; font-weight:600; color:var(--cream); text-shadow:0 0 50px rgba(243,199,207,0.25); }
+  .hero h1 em{ font-style:italic; font-weight:400; color:var(--blossom); }
+  .hero p.lede{ max-width:24rem; margin:1.3rem auto 0; font-size:1rem; line-height:1.75; color:var(--cream-2); opacity:0.92; }
+  .hero-actions{ margin-top:2.2rem; }
+  .btn{ font-family:'Inter', sans-serif; font-size:0.8rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:1rem 1.8rem; text-decoration:none; border-radius:3px; display:inline-block; transition:transform .2s ease, box-shadow .2s ease, opacity .2s ease; min-height:48px; touch-action:manipulation; }
+  .btn-primary{ background:var(--chrome); color:var(--ink); box-shadow:0 8px 26px rgba(240,180,41,0.35); }
+  .btn-primary:active{ transform:scale(0.97); }
+  .btn-primary:disabled{ opacity:0.4; box-shadow:none; }
+  .btn-primary.hidden{ display:none; }
+  .btn-no{ 
+    background:var(--cream-2); 
+    color:var(--ink); 
+    border:1px solid rgba(28,21,8,0.15);
+    box-shadow:0 4px 16px rgba(28,21,8,0.06);
+  }
+  .btn-no:active{ transform:scale(0.97); }
+  .btn-no.hidden{ display:none; }
+  .scroll-cue{ position:absolute; bottom:1.6rem; left:50%; transform:translateX(-50%); color:var(--cream-2); opacity:0.55; font-family:'JetBrains Mono',monospace; font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; display:flex; flex-direction:column; align-items:center; gap:0.4rem; z-index:2; }
+  .scroll-cue .line{ width:1px; height:28px; background:linear-gradient(var(--blossom), transparent); animation:drip 2.2s ease-in-out infinite; }
+  @keyframes drip{ 0%{transform:scaleY(0); transform-origin:top;} 50%{transform:scaleY(1); transform-origin:top;} 51%{transform-origin:bottom;} 100%{transform:scaleY(0); transform-origin:bottom;} }
+
+  .brush-divider{ display:block; width:100%; height:36px; }
+  .brush-divider path{ fill:var(--cream); }
+  .brush-divider.flip path{ fill:var(--night); }
+
+  section{ position:relative; padding:4.4rem 0; }
+  .section-head{ margin-bottom:2.2rem; text-align:center; }
+  .section-head h2{ font-size:clamp(1.7rem,7vw,2.2rem); font-weight:600; line-height:1.1; margin-top:0.5rem; }
+
+  .quote-card{
+    background:rgba(255,255,255,0.7);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    border-radius:16px;
+    padding:1.4rem 1.6rem;
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:1.05rem;
+    line-height:1.5;
+    color:var(--night);
+    border:1px solid rgba(255,255,255,0.5);
+    box-shadow:0 4px 20px rgba(28,21,8,0.06);
+    text-align:center;
+    max-width:400px;
+    margin:0 auto;
+  }
+  .quote-card .emoji{ display:block; font-size:1.8rem; margin-bottom:0.3rem; font-style:normal; }
+  .quote-card.light{ background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15); color:var(--cream); }
+
+  .inspiration-section{ background:var(--cream); }
+  .inspiration-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:1rem;
+  }
+  .inspiration-card{
+    background:var(--cream-2);
+    border-radius:14px;
+    padding:1.4rem 0.8rem;
+    text-align:center;
+    border:1px solid rgba(28,21,8,0.05);
+    transition:transform .2s ease;
+  }
+  .inspiration-card .icon{ font-size:2.2rem; margin-bottom:0.5rem; display:block; }
+  .inspiration-card h3{ font-family:'Playfair Display', serif; font-size:0.95rem; font-weight:600; margin-bottom:0.2rem; }
+  .inspiration-card p{ font-size:0.75rem; opacity:0.6; line-height:1.4; }
+
+  .mood-section{ background:var(--cream); padding-top:2rem; }
+  .mood-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr 1fr;
+    gap:0.8rem;
+  }
+  .mood-item{
+    border-radius:12px;
+    padding:1.2rem 0.5rem;
+    text-align:center;
+    background:rgba(255,255,255,0.5);
+    border:1px solid rgba(28,21,8,0.06);
+    min-height:80px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+  .mood-item .emoji{ font-size:1.6rem; margin-bottom:0.3rem; }
+  .mood-item .label{ font-size:0.75rem; opacity:0.7; }
+
+  .quote-section{ background:var(--cream); text-align:center; }
+  .quote-block{
+    font-family:'Playfair Display', serif; font-style:italic; font-weight:400;
+    font-size:clamp(1.5rem, 7vw, 1.9rem); line-height:1.4; color:var(--night);
+    max-width:22rem; margin:0 auto; position:relative; padding:1.6rem 0;
+  }
+  .quote-block::before, .quote-block::after{ content:"🌻"; display:block; font-size:1.2rem; opacity:0.7; margin-bottom:0.6rem; }
+  .quote-block::after{ margin-top:0.9rem; margin-bottom:0; }
+
+  .countdown{ background:var(--night); color:var(--cream); text-align:center; }
+  .countdown .eyebrow{ color:var(--blossom); opacity:1; }
+  .countdown h2{ color:var(--cream); min-height:2.5rem; }
+  .countdown-grid{ display:flex; justify-content:center; gap:0.8rem; margin-top:1.8rem; }
+  .count-box{ background:rgba(243,199,207,0.08); border:1px solid rgba(243,199,207,0.22); border-radius:10px; padding:1rem 0.7rem; min-width:66px; }
+  .count-box .num{ font-family:'Playfair Display', serif; font-size:1.8rem; font-weight:700; color:var(--chrome-2); line-height:1; }
+  .count-box .lbl{ font-family:'JetBrains Mono', monospace; font-size:0.55rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.55; margin-top:0.4rem; }
+
+  .details-section{ background:var(--night); color:var(--cream); }
+  .details-section .eyebrow{ color:var(--blossom); opacity:1; }
+  .details-section .section-head h2{ color:var(--cream); }
+  .details-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0.8rem;
+  }
+  .detail-item{
+    background:rgba(243,199,207,0.06);
+    border:1px solid rgba(243,199,207,0.12);
+    border-radius:12px;
+    padding:1.2rem 0.8rem;
+    text-align:center;
+  }
+  .detail-item .icon{ font-size:1.6rem; display:block; margin-bottom:0.3rem; }
+  .detail-item .label{ font-family:'JetBrains Mono', monospace; font-size:0.6rem; text-transform:uppercase; letter-spacing:0.08em; opacity:0.4; }
+  .detail-item .value{ font-family:'Playfair Display', serif; font-size:1rem; font-weight:400; margin-top:0.2rem; opacity:0.9; }
+
+  .datetime{ background:var(--night); color:var(--cream); }
+  .datetime .eyebrow{ color:var(--blossom); opacity:1; }
+  .datetime .section-head h2{ color:var(--cream); }
+  .date-pill{
+    display:flex; align-items:center; justify-content:center; gap:0.6rem;
+    font-family:'JetBrains Mono', monospace; font-size:0.8rem; letter-spacing:0.05em;
+    background:rgba(243,199,207,0.1); border:1px solid rgba(243,199,207,0.3);
+    padding:0.8rem 1.2rem; border-radius:30px; margin:0 auto 2rem; width:fit-content;
+  }
+  .slots{ display:grid; grid-template-columns:repeat(3, 1fr); gap:0.7rem; }
+  .slot{
+    min-height:52px; border-radius:8px; border:1px solid rgba(242,233,212,0.22);
+    background:rgba(242,233,212,0.04); color:var(--cream); font-family:'JetBrains Mono', monospace;
+    font-size:0.8rem; display:flex; align-items:center; justify-content:center;
+    transition:all .2s ease; touch-action:manipulation;
+    -webkit-touch-callout:none;
+  }
+  .slot:active{ transform:scale(0.95); }
+  .slot.selected{ background:var(--chrome); color:var(--ink); border-color:var(--chrome); font-weight:700; box-shadow:0 6px 20px rgba(240,180,41,0.35); }
+
+  .style-section{ background:var(--cream); }
+  .style-grid{ display:grid; grid-template-columns:1fr 1fr; gap:0.9rem; }
+  .style-card{
+    border:1.5px solid rgba(28,21,8,0.12); border-radius:12px; padding:1.3rem 1rem;
+    background:var(--cream); text-align:center; transition:all .2s ease; touch-action:manipulation;
+  }
+  .style-card:active{ transform:scale(0.97); }
+  .style-card.selected{ border-color:var(--blossom-deep); background:var(--blossom-2); box-shadow:0 8px 22px rgba(217,142,160,0.25); }
+  .style-card .icon{ width:38px; height:38px; margin:0 auto 0.7rem; }
+  .style-card h3{ font-family:'Playfair Display', serif; font-size:1rem; font-weight:600; margin-bottom:0.3rem; }
+  .style-card p{ font-size:0.78rem; opacity:0.65; line-height:1.4; }
+
+  .feedback-section{ background:var(--cream); padding-top:1rem; padding-bottom:2rem; }
+  .feedback-box{
+    background:var(--cream-2);
+    border-radius:16px;
+    padding:1.5rem;
+    border:1px solid rgba(28,21,8,0.06);
+  }
+  .feedback-box textarea{
+    width:100%;
+    min-height:80px;
+    border:1px solid rgba(28,21,8,0.1);
+    border-radius:10px;
+    padding:0.8rem 1rem;
+    font-family:'Inter', sans-serif;
+    font-size:0.95rem;
+    background:rgba(255,255,255,0.5);
+    resize:vertical;
+    transition:border-color .2s ease;
+    -webkit-appearance:none;
+  }
+  .feedback-box textarea:focus{
+    outline:none;
+    border-color:var(--blossom-deep);
+  }
+  .feedback-box .btn-send{
+    display:block;
+    margin:0.8rem auto 0;
+    background:var(--blossom-deep);
+    color:white;
+    padding:0.8rem 2rem;
+    border-radius:30px;
+    font-family:'Inter', sans-serif;
+    font-weight:500;
+    font-size:0.75rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    transition:opacity .2s ease, transform .2s ease;
+  }
+  .feedback-box .btn-send:active{ transform:scale(0.95); }
+  .feedback-box .btn-send:disabled{ opacity:0.4; }
+
+  .summary-section{ 
+    background:linear-gradient(160deg, var(--blossom) 0%, var(--chrome) 100%); 
+    text-align:center;
+    padding-bottom:5rem;
+  }
+  .summary-card{
+    background:rgba(255,255,255,0.55); 
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    border-radius:16px; 
+    padding:2rem 1.5rem; 
+    margin-bottom:1.8rem;
+    border:1px solid rgba(255,255,255,0.5);
+  }
+  .summary-card .label{ 
+    font-family:'JetBrains Mono', monospace; 
+    font-size:0.6rem; 
+    letter-spacing:0.14em; 
+    text-transform:uppercase; 
+    opacity:0.6; 
+    margin-bottom:0.4rem; 
+  }
+  .summary-card .value{ 
+    font-family:'Playfair Display', serif; 
+    font-size:1.3rem; 
+    font-weight:600; 
+    margin-bottom:1.1rem; 
+    min-height:1.6rem; 
+  }
+  .summary-card .value:last-of-type{ margin-bottom:0; }
+  .hint{ font-size:0.82rem; opacity:0.7; margin-top:0.9rem; min-height:1.2rem; }
+
+  .btn-group{
+    display:flex;
+    flex-direction:column;
+    gap:0.8rem;
+    align-items:center;
+    justify-content:center;
+    margin-top:1.5rem;
+  }
+  .btn-group .btn{
+    width:100%;
+    max-width:280px;
+  }
+
+  .error-message{
+    display:none;
+    margin-top:1rem;
+    padding:1rem 1.2rem;
+    background:var(--red-light);
+    border:1px solid var(--red);
+    border-radius:12px;
+    color:var(--red);
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:1rem;
+    text-align:center;
+    animation:shake 0.5s ease;
+  }
+  .error-message.show{
+    display:block;
+  }
+  .error-message .emoji{
+    display:block;
+    font-size:1.8rem;
+    margin-bottom:0.3rem;
+    font-style:normal;
+  }
+
+  .no-message{
+    display:none;
+    margin-top:1rem;
+    padding:1.5rem 1.2rem;
+    background:rgba(255,255,255,0.6);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,0.5);
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:1.1rem;
+    color:var(--night);
+    text-align:center;
+    animation:fadeIn 0.6s ease;
+  }
+  .no-message.show{
+    display:block;
+  }
+  .no-message .emoji{
+    display:block;
+    font-size:2.2rem;
+    margin-bottom:0.5rem;
+    font-style:normal;
+  }
+
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    20%{transform:translateX(-10px);}
+    40%{transform:translateX(10px);}
+    60%{transform:translateX(-6px);}
+    80%{transform:translateX(6px);}
+  }
+
+  @keyframes fadeIn{
+    0%{opacity:0; transform:scale(0.95);}
+    100%{opacity:1; transform:scale(1);}
+  }
+
+  .overlay{
+    position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(ellipse 130% 90% at 50% 30%, var(--night-2), var(--night) 65%, #090f20 100%);
+    opacity:0; pointer-events:none; transition:opacity .5s ease; padding:2rem;
+  }
+  .overlay.show{ opacity:1; pointer-events:all; }
+  .overlay-card{ text-align:center; color:var(--cream); max-width:22rem; }
+  .overlay-card h2{ font-family:'Playfair Display', serif; font-size:clamp(2rem,9vw,2.6rem); margin-bottom:1rem; color:var(--blossom); }
+  .overlay-card p{ line-height:1.7; opacity:0.85; margin-bottom:1.6rem; }
+  .overlay-close{ font-family:'Inter', sans-serif; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--cream); opacity:0.6; text-decoration:underline; min-height:44px; touch-action:manipulation; }
+  .burst{ position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+
+  @media (max-width:480px){
+    .inspiration-grid{ grid-template-columns:1fr; }
+    .mood-grid{ grid-template-columns:1fr 1fr; }
+    .details-grid{ grid-template-columns:1fr; }
+    .slots{ grid-template-columns:repeat(2,1fr); }
+    .wrap{ padding:0 1rem; }
+    section{ padding:3rem 0; }
+    .hero{ padding:calc(3rem + var(--safe-t)) 1rem 2.5rem; }
+    .quote-card{ margin-left:0.5rem; margin-right:0.5rem; }
+    .heart-trace{ top:10%; width:80px; height:64px; }
+    .btn-group .btn{ max-width:100%; }
+    .countdown-grid{ gap:0.4rem; }
+    .count-box{ min-width:54px; padding:0.8rem 0.4rem; }
+    .count-box .num{ font-size:1.4rem; }
+  }
+
+  @media (max-width:380px){
+    .slots{ grid-template-columns:1fr 1fr; gap:0.5rem; }
+    .slot{ min-height:44px; font-size:0.75rem; }
+    .style-grid{ grid-template-columns:1fr; }
+    .count-box{ min-width:48px; padding:0.6rem 0.3rem; }
+    .count-box .num{ font-size:1.2rem; }
+    .count-box .lbl{ font-size:0.45rem; }
+    .heart-trace{ top:8%; width:64px; height:52px; }
+  }
+
+  @supports (padding:max(0px)) {
+    .hero, .intro-overlay, .overlay { padding-left:max(1.4rem, env(safe-area-inset-left)); padding-right:max(1.4rem, env(safe-area-inset-right)); }
+  }
+</style>
+</head>
+<body>
+
+<svg class="grain"><filter id="grainFilter"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0"/></filter><rect width="100%" height="100%" filter="url(#grainFilter)"/></svg>
+
+<div class="intro-overlay" id="introOverlay">
+  <div class="stars" id="introStars"></div>
+  <div class="envelope" id="envelope">
+    <div class="envelope-body"></div>
+    <div class="envelope-flap"></div>
+    <div class="wax-seal">К</div>
+  </div>
+  <div class="intro-caption">
+    <div class="to">Для Ксюші</div>
+    <div class="hint">торкнись конверта, щоб відкрити</div>
+  </div>
+</div>
+
+<section class="hero" id="heroSection">
+  <div class="sunflowers-bg">
+    <svg class="sunflower-bg" viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="18" fill="#5a3e1b"/><circle cx="60" cy="60" r="12" fill="#2d1f0a"/>
+      <g fill="#f4c430"><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(0 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(45 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(90 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(135 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(180 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(225 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(270 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(315 60 60)"/></g>
+    </svg>
+    <svg class="sunflower-bg" viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="18" fill="#5a3e1b"/><circle cx="60" cy="60" r="12" fill="#2d1f0a"/>
+      <g fill="#f4c430"><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(0 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(45 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(90 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(135 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(180 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(225 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(270 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(315 60 60)"/></g>
+    </svg>
+    <svg class="sunflower-bg" viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="18" fill="#5a3e1b"/><circle cx="60" cy="60" r="12" fill="#2d1f0a"/>
+      <g fill="#f4c430"><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(0 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(45 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(90 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(135 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(180 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(225 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(270 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(315 60 60)"/></g>
+    </svg>
+    <svg class="sunflower-bg" viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="18" fill="#5a3e1b"/><circle cx="60" cy="60" r="12" fill="#2d1f0a"/>
+      <g fill="#f4c430"><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(0 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(45 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(90 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(135 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(180 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(225 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(270 60 60)"/><ellipse cx="60" cy="32" rx="8" ry="14" transform="rotate(315 60 60)"/></g>
+    </svg>
+  </div>
+  <div class="swirl-layer"></div>
+  <div class="stars" id="stars"></div>
+  <div class="petals" id="petals"></div>
+  <svg class="cypress" viewBox="0 0 120 260" fill="none"><path d="M60,260 C42,222 68,204 50,176 C74,158 42,140 64,112 C42,94 70,76 56,50 C68,36 62,18 60,0 C58,18 52,36 64,50 C50,76 78,94 56,112 C78,140 46,158 70,176 C52,204 78,222 60,260 Z" fill="var(--midnight)" opacity="0.65"/></svg>
+  <svg class="moon" viewBox="0 0 60 60" fill="none"><path d="M38,6 A24,24 0 1 0 38,54 A19,19 0 1 1 38,6 Z" fill="var(--chrome-2)"/></svg>
+  
+  <svg class="heart-trace" id="heartTrace" viewBox="0 0 200 160">
+    <path id="heartPath" d="M100,45 C82,15 22,15 22,58 C22,92 60,112 100,142 C140,112 178,92 178,58 C178,15 118,15 100,45 Z"/>
+  </svg>
+
+  <div class="hero-content">
+    <span class="hero-eyebrow">Запрошення на побачення</span>
+    <h1>Хочу провести цей вечір<br><em>з тобою</em></h1>
+    <p class="lede">Запрошую тебе на побачення. Разом — соняхи Ван Гога, тепла кава та зорі, які ми зробимо нашими. Ти як?</p>
+    <div class="hero-actions">
+      <a href="#datetime" class="btn btn-primary" id="respondBtn">Відповісти</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Гортай далі</span><span class="line"></span><span class="tap-hint">🌻 торкнись неба</span></div>
+</section>
+
+<svg class="brush-divider" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,16 C150,36 300,0 450,14 C600,28 750,4 900,18 C1000,26 1100,8 1200,16 L1200,36 L0,36 Z"/></svg>
+
+<section class="quote-section reveal">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:1rem;">Замість епіграфа</p>
+    <div class="quote-block">
+      Ти заслуговуєш на ту ж любов, яку даруєш іншим.
+    </div>
+  </div>
+</section>
+
+<svg class="brush-divider flip" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,20 C180,2 320,34 480,16 C650,-2 800,30 970,12 C1080,2 1140,20 1200,10 L1200,36 L0,36 Z"/></svg>
+
+<section class="inspiration-section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Що я пропоную</p>
+      <h2>Наш вечір</h2>
+    </div>
+    <div class="inspiration-grid reveal">
+      <div class="inspiration-card">
+        <span class="icon">🎨</span>
+        <h3>Виставка Ван Гога</h3>
+        <p>Соняхи, зоряна ніч і ми — серед улюблених картин</p>
+      </div>
+      <div class="inspiration-card">
+        <span class="icon">☕</span>
+        <h3>Ароматна кава</h3>
+        <p>Теплий напій, затишна розмова та спокійний вечір</p>
+      </div>
+      <div class="inspiration-card">
+        <span class="icon">🌌</span>
+        <h3>Прогулянка під зорями</h3>
+        <p>Коли час зупиняється, а небо стає спільним</p>
+      </div>
+    </div>
+    <div class="quote-card reveal" style="margin-top:2rem;">
+      <span class="emoji">🌻</span>
+      Не змінюй себе. Ти вже прекрасна саме такою
+    </div>
+  </div>
+</section>
+
+<section class="mood-section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Настрій вечора</p>
+      <h2>Яким він буде?</h2>
+    </div>
+    <div class="mood-grid reveal">
+      <div class="mood-item"><span class="emoji">🕯️</span><span class="label">Теплий</span></div>
+      <div class="mood-item"><span class="emoji">🎵</span><span class="label">Музичний</span></div>
+      <div class="mood-item"><span class="emoji">🌙</span><span class="label">Романтичний</span></div>
+      <div class="mood-item"><span class="emoji">🌸</span><span class="label">Ніжний</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap" style="padding:0 1.4rem; margin:1rem auto;">
+  <div class="quote-card reveal">
+    <span class="emoji">✨</span>
+    Кожен день із тобою — це маленьке диво
+  </div>
+</div>
+
+<svg class="brush-divider" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,16 C150,36 300,0 450,14 C600,28 750,4 900,18 C1000,26 1100,8 1200,16 L1200,36 L0,36 Z"/></svg>
+
+<section class="countdown">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">До зустрічі залишилось</p>
+      <h2>&nbsp;</h2>
+    </div>
+    <div class="countdown-grid reveal" id="countdownGrid">
+      <div class="count-box"><div class="num" id="cdDays">–</div><div class="lbl" id="cdDaysLabel">днів</div></div>
+      <div class="count-box"><div class="num" id="cdHours">–</div><div class="lbl">годин</div></div>
+      <div class="count-box"><div class="num" id="cdMinutes">–</div><div class="lbl">хвилин</div></div>
+      <div class="count-box"><div class="num" id="cdSeconds">–</div><div class="lbl">секунд</div></div>
+    </div>
+    <div class="quote-card light reveal" style="margin-top:2rem;">
+      <span class="emoji">🌙</span>
+      Ти бачиш недоліки, а я бачу красу
+    </div>
+  </div>
+</section>
+
+<svg class="brush-divider flip" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,20 C180,2 320,34 480,16 C650,-2 800,30 970,12 C1080,2 1140,20 1200,10 L1200,36 L0,36 Z"/></svg>
+
+<section class="details-section" id="details">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Додатково</p>
+      <h2>Що робить вечір особливим?</h2>
+    </div>
+    <div class="details-grid reveal">
+      <div class="detail-item">
+        <span class="icon">💬</span>
+        <div class="label">Розмови</div>
+        <div class="value">Про все, що хвилює</div>
+      </div>
+      <div class="detail-item">
+        <span class="icon">✨</span>
+        <div class="label">Магія</div>
+        <div class="value">Маленьких моментів, що запам'ятовуються</div>
+      </div>
+      <div class="detail-item">
+        <span class="icon">📸</span>
+        <div class="label">Моменти</div>
+        <div class="value">Зробимо пам'ятні фото</div>
+      </div>
+      <div class="detail-item">
+        <span class="icon">💫</span>
+        <div class="label">Відчуття</div>
+        <div class="value">Безтурботності та тепла</div>
+      </div>
+    </div>
+    <div class="quote-card light reveal" style="margin-top:1.5rem;">
+      <span class="emoji">🌟</span>
+      Найцінніше — це не речі, а моменти, які ми створюємо разом
+    </div>
+  </div>
+</section>
+
+<svg class="brush-divider" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,16 C150,36 300,0 450,14 C600,28 750,4 900,18 C1000,26 1100,8 1200,16 L1200,36 L0,36 Z"/></svg>
+
+<section class="datetime" id="datetime">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Крок 1</p>
+      <h2>Коли зустрінемось?</h2>
+    </div>
+    <div class="date-pill reveal">🗓 Субота, 22 серпня</div>
+    <div class="slots reveal" id="slots"></div>
+  </div>
+</section>
+
+<section class="style-section" id="style">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Крок 2</p>
+      <h2>Який настрій у вбранні?</h2>
+    </div>
+    <div class="style-grid reveal" id="styleGrid">
+      <button class="style-card" data-style="Спортивний">
+        <svg class="icon" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="19" stroke="#3a5bab" stroke-width="2.5"/><path d="M9 24h30M24 5c5 5 5 33 0 38M24 5c-5 5-5 33 0 38" stroke="#3a5bab" stroke-width="1.6" opacity="0.6"/></svg>
+        <h3>Спортивний</h3>
+        <p>Легко, невимушено, зручно</p>
+      </button>
+      <button class="style-card" data-style="Класичний">
+        <svg class="icon" viewBox="0 0 48 48" fill="none"><path d="M14 12l10-5 10 5-3 5h-14z" stroke="#1c1508" stroke-width="2" stroke-linejoin="round"/><path d="M17 17v22h14V17" stroke="#1c1508" stroke-width="2"/><circle cx="24" cy="9" r="1.2" fill="#1c1508"/></svg>
+        <h3>Класичний</h3>
+        <p>Витончено, як на прем'єрі</p>
+      </button>
+      <button class="style-card" data-style="Літній">
+        <svg class="icon" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="14" r="6" fill="#f0b429" opacity="0.8"/><path d="M6 30c8-6 28-6 36 0" stroke="#f0b429" stroke-width="2"/><path d="M10 24l3 4M38 24l-3 4M24 24v6" stroke="#f0b429" stroke-width="1.6" opacity="0.7"/></svg>
+        <h3>Літній</h3>
+        <p>Легка тканина, сонце і вітер</p>
+      </button>
+      <button class="style-card" data-style="Вечірній">
+        <svg class="icon" viewBox="0 0 48 48" fill="none"><path d="M24 6c-7 5-11 12-11 19a11 11 0 0022 0c0-2-0.5-4-1.5-6-1 3-3 5-5.5 5 3-4 2-11-4-18z" fill="#d98ea0" opacity="0.85"/></svg>
+        <h3>Вечірній</h3>
+        <p>Приглушене світло, тихий джаз</p>
+      </button>
+    </div>
+  </div>
+</section>
+
+<svg class="brush-divider" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,16 C150,36 300,0 450,14 C600,28 750,4 900,18 C1000,26 1100,8 1200,16 L1200,36 L0,36 Z"/></svg>
+
+<section class="feedback-section" id="feedback">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">💌 Крок 3</p>
+      <h2>Напиши мені</h2>
+    </div>
+    <div class="feedback-box reveal">
+      <p style="font-size:0.9rem; opacity:0.7; margin-bottom:0.8rem;">Можеш написати що завгодно — думки, побажання, або просто щось приємне 💛</p>
+      <textarea id="feedbackText" placeholder="Напиши тут..."></textarea>
+      <button class="btn-send" id="sendFeedbackBtn">Відправити 💌</button>
+      <p id="feedbackStatus" style="font-size:0.75rem; opacity:0.5; margin-top:0.5rem; min-height:1.2rem; text-align:center;"></p>
+    </div>
+  </div>
+</section>
+
+<svg class="brush-divider flip" viewBox="0 0 1200 36" preserveAspectRatio="none"><path d="M0,20 C180,2 320,34 480,16 C650,-2 800,30 970,12 C1080,2 1140,20 1200,10 L1200,36 L0,36 Z"/></svg>
+
+<section class="summary-section" id="summary">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow" style="color:var(--ink); opacity:0.55;">Крок 4</p>
+      <h2 style="color:var(--ink);">Підтвердити запрошення</h2>
+    </div>
+    <div class="summary-card reveal">
+      <div class="label">Час</div>
+      <div class="value" id="sumTime">— обери вище —</div>
+      <div class="label">Настрій вбрання</div>
+      <div class="value" id="sumStyle">— обери вище —</div>
+    </div>
+
+    <div class="btn-group" id="btnGroup">
+      <button class="btn btn-primary reveal" id="confirmBtn" disabled>Так, я йду 🌻</button>
+      <button class="btn btn-no reveal" id="noBtn">Ні, я не піду</button>
+    </div>
+
+    <div class="no-message" id="noMessage">
+      <span class="emoji">💔</span>
+      Шкода... Ти втратила свій шанс на незабутній вечір.
+    </div>
+
+    <p class="hint reveal" id="hint">Обери час і стиль, щоб продовжити</p>
+  </div>
+</section>
+
+<div class="overlay" id="overlay">
+  <div class="burst" id="burst"></div>
+  <div class="overlay-card">
+    <h2>Чекатиму! 🌻</h2>
+    <p id="overlayText">Побачення підтверджено.</p>
+    <p style="font-style:italic; font-family:'Playfair Display',serif; font-size:1.1rem; opacity:0.9;">«Ти заслуговуєш на ту ж любов, яку даруєш іншим.»</p>
+    <button class="overlay-close" id="closeOverlay">Закрити</button>
+  </div>
+</div>
+
+<script>
+  document.body.style.overflow = 'hidden';
+
+  const introStarsEl = document.getElementById('introStars');
+  for(let i=0;i<24;i++){
+    const s = document.createElement('span');
+    s.style.position='absolute';
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*4)+'s';
+    introStarsEl.appendChild(s);
+  }
+
+  const introOverlay = document.getElementById('introOverlay');
+  const envelope = document.getElementById('envelope');
+  let envelopeOpened = false;
+  function openEnvelope(){
+    if(envelopeOpened) return;
+    envelopeOpened = true;
+    envelope.classList.add('opening');
+    setTimeout(()=>{
+      introOverlay.classList.add('closed');
+      document.body.style.overflow = '';
+    }, 950);
+  }
+  envelope.addEventListener('click', openEnvelope);
+  introOverlay.addEventListener('click', (e)=>{ if(e.target === introOverlay) openEnvelope(); });
+
+  document.getElementById('respondBtn').addEventListener('click', function(e){
+    e.preventDefault();
+    const target = document.getElementById('datetime');
+    if(target){
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  let selectedTime = null;
+  let selectedStyle = null;
+  let selectedHour = 9;
+
+  const cdDays = document.getElementById('cdDays');
+  const cdHours = document.getElementById('cdHours');
+  const cdMinutes = document.getElementById('cdMinutes');
+  const cdSeconds = document.getElementById('cdSeconds');
+  const cdDaysLabel = document.getElementById('cdDaysLabel');
+
+  function getDaysLabel(days) {
+    if (days === 0) return 'днів';
+    if (days === 1) return 'день';
+    if (days >= 2 && days <= 4) return 'дні';
+    return 'днів';
+  }
+
+  function updateCountdown() {
+    const hour = selectedHour || 9;
+    const target = new Date('2026-08-22T' + String(hour).padStart(2,'0') + ':00:00');
+    const diff = target - new Date();
+    
+    if(diff <= 0){
+      cdDays.textContent = '0';
+      cdDaysLabel.textContent = 'днів';
+      cdHours.textContent = '0';
+      cdMinutes.textContent = '0';
+      cdSeconds.textContent = '0';
+      return;
+    }
+    
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    
+    cdDays.textContent = d;
+    cdDaysLabel.textContent = getDaysLabel(d);
+    cdHours.textContent = String(h).padStart(2, '0');
+    cdMinutes.textContent = String(m).padStart(2, '0');
+    cdSeconds.textContent = String(s).padStart(2, '0');
+  }
+  
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  const heroSection = document.getElementById('heroSection');
+  const heartTrace = document.getElementById('heartTrace');
+  const heartPath = document.getElementById('heartPath');
+  let heartTimer = null;
+  heroSection.addEventListener('click', (e)=>{
+    if(e.target.closest('.btn') || e.target.closest('.scroll-cue')) return;
+    heartTrace.classList.add('show');
+    heartPath.style.strokeDashoffset = '0';
+    clearTimeout(heartTimer);
+    heartTimer = setTimeout(()=>{
+      heartTrace.classList.remove('show');
+      heartPath.style.strokeDashoffset = '450';
+    }, 2600);
+  });
+
+  const starsEl = document.getElementById('stars');
+  for(let i=0;i<45;i++){
+    const s = document.createElement('span');
+    s.style.position='absolute';
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*65+'%';
+    s.style.animationDelay = (Math.random()*4)+'s';
+    starsEl.appendChild(s);
+  }
+
+  const petalsEl = document.getElementById('petals');
+  for(let i=0;i<16;i++){
+    const p = document.createElement('div');
+    p.className='petal';
+    const size = 8 + Math.random()*10;
+    p.style.width = size+'px';
+    p.style.height = size*0.75+'px';
+    p.style.left = Math.random()*100+'%';
+    p.style.setProperty('--drift', (Math.random()*80-40)+'px');
+    p.style.animationDuration = (10+Math.random()*10)+'s';
+    p.style.animationDelay = (Math.random()*10)+'s';
+    petalsEl.appendChild(p);
+  }
+
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold:0.15 });
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  const slotsEl = document.getElementById('slots');
+  for(let h=9; h<=22; h++){
+    const btn = document.createElement('button');
+    btn.className='slot';
+    const label = String(h).padStart(2,'0')+':00';
+    btn.textContent = label;
+    btn.dataset.hour = h;
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.slot').forEach(s=>s.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedTime = label;
+      selectedHour = h;
+      updateCountdown();
+      updateSummary();
+    });
+    slotsEl.appendChild(btn);
+  }
+
+  document.querySelectorAll('.style-card').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      document.querySelectorAll('.style-card').forEach(c=>c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedStyle = card.dataset.style;
+      updateSummary();
+    });
+  });
+
+  const sumTime = document.getElementById('sumTime');
+  const sumStyle = document.getElementById('sumStyle');
+  const confirmBtn = document.getElementById('confirmBtn');
+  const hint = document.getElementById('hint');
+  const noBtn = document.getElementById('noBtn');
+  const noMessage = document.getElementById('noMessage');
+  const btnGroup = document.getElementById('btnGroup');
+
+  function updateSummary(){
+    sumTime.textContent = selectedTime ? ('Субота, 22 серпня · '+selectedTime) : '— обери вище —';
+    sumStyle.textContent = selectedStyle || '— обери вище —';
+    if(selectedTime && selectedStyle){
+      confirmBtn.disabled = false;
+      hint.textContent = 'Все готово — можна підтвердити ✨';
+    } else {
+      confirmBtn.disabled = true;
+      hint.textContent = 'Обери час і стиль, щоб продовжити';
+    }
+  }
+
+  noBtn.addEventListener('click', ()=>{
+    confirmBtn.classList.add('hidden');
+    noBtn.classList.add('hidden');
+    noMessage.classList.add('show');
+    hint.textContent = 'Ти відмовилась... Шкода.';
+  });
+
+  const BOT_TOKEN = '8536107493:AAHwC8QLwPeiBjmnffOd_omY7mOSvgcDQhs';
+  const CHAT_ID = '574048138';
+
+  const overlay = document.getElementById('overlay');
+  const overlayText = document.getElementById('overlayText');
+  const burst = document.getElementById('burst');
+
+  async function sendToTelegram(message) {
+    try {
+      const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: message,
+          parse_mode: 'HTML'
+        })
+      });
+      const data = await response.json();
+      if (!data.ok) console.error('Telegram помилка:', data);
+    } catch (err) {
+      console.error('Помилка відправки в Telegram:', err);
+    }
+  }
+
+  confirmBtn.addEventListener('click', ()=>{
+    if(confirmBtn.disabled) return;
+    const msg = `🌻 <b>Ксюш підтвердила побачення!</b>\n\n🕐 Час: ${selectedTime}\n👗 Стиль: ${selectedStyle}\n\n✨ До зустрічі!`;
+    overlayText.textContent = 'Побачення підтверджено! Чекатиму на тебе в суботу, 22 серпня, о '+selectedTime+'. Вбрання — '+selectedStyle.toLowerCase()+'. До зустрічі, Ксюш. 🌻';
+    overlay.classList.add('show');
+    burst.innerHTML='';
+    const colors = ['#f0b429','#f3c7cf','#3a5bab','#f6cf5e','#f4c430'];
+    for(let i=0;i<28;i++){
+      const d = document.createElement('div');
+      const size = 6+Math.random()*8;
+      d.style.position='absolute';
+      d.style.width=size+'px';
+      d.style.height=size+'px';
+      d.style.borderRadius='50%';
+      d.style.background=colors[i%colors.length];
+      d.style.left='50%';
+      d.style.top='40%';
+      d.style.opacity='0.9';
+      const angle = Math.random()*Math.PI*2;
+      const dist = 80+Math.random()*180;
+      d.style.transition='transform 1.2s cubic-bezier(.15,.7,.3,1), opacity 1.2s ease';
+      burst.appendChild(d);
+      requestAnimationFrame(()=>{
+        d.style.transform = `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px)`;
+        d.style.opacity='0';
+      });
+    }
+    sendToTelegram(msg);
+  });
+
+  document.getElementById('closeOverlay').addEventListener('click', ()=>{
+    overlay.classList.remove('show');
+  });
+
+  const feedbackText = document.getElementById('feedbackText');
+  const sendFeedbackBtn = document.getElementById('sendFeedbackBtn');
+  const feedbackStatus = document.getElementById('feedbackStatus');
+
+  sendFeedbackBtn.addEventListener('click', async ()=>{
+    const text = feedbackText.value.trim();
+    if(!text){
+      feedbackStatus.textContent = 'Напиши щось 💛';
+      return;
+    }
+    sendFeedbackBtn.disabled = true;
+    feedbackStatus.textContent = 'Відправляємо...';
+    const msg = `💌 <b>Повідомлення від Ксюш</b>\n\n${text}`;
+    await sendToTelegram(msg);
+    feedbackStatus.textContent = 'Дякую! Твоє повідомлення надіслано 💫';
+    feedbackText.value = '';
+    setTimeout(()=>{
+      sendFeedbackBtn.disabled = false;
+      feedbackStatus.textContent = '';
+    }, 3000);
+  });
+</script>
+
+</body>
+</html>
